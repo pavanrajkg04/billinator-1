@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billinator - Product Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+            color: #333;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #667eea;
+        }
+
+        h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #764ba2;
+        }
+
+        p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-container img {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card h4 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .feature-card p {
+            font-size: 1em;
+            color: #666;
+        }
+
+        .benefit-list {
+            list-style: none;
+            margin-top: 30px;
+        }
+
+        .benefit-list li {
+            font-size: 1.3em;
+            padding: 15px 0;
+            padding-left: 40px;
+            position: relative;
+            color: #555;
+        }
+
+        .benefit-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .label {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-button {
+            background: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            color: #667eea;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            color: #667eea;
+            z-index: 1000;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+
+        .tagline {
+            font-size: 1.5em;
+            color: #764ba2;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+
+        .company-info {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .company-info a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .company-info a:hover {
+            text-decoration: underline;
+        }
+
+        .pricing-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .demo-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .demo-section img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="slide-counter">
+            <span id="current-slide">1</span> / <span id="total-slides">10</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <div class="slide-content">
+                <div class="logo-container">
+                    <img src="frontend/public/logo.png" alt="Billinator Logo" onerror="this.style.display='none'">
+                    <h1>Billinator</h1>
+                    <p class="tagline">The Future of GST Billing & Inventory Management</p>
+                </div>
+                <div style="text-align: center; margin-top: 40px;">
+                    <p style="font-size: 1.5em; color: #764ba2;">
+                        Complete Multi-Tenant Solution for Modern Businesses
+                    </p>
+                    <p style="margin-top: 20px; font-size: 1.2em; color: #666;">
+                        Developed by <strong>Medhā Labs</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: The Problem -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>The Challenge</h2>
+                <p style="font-size: 1.4em; margin-bottom: 40px;">
+                    Managing billing, inventory, and customer relationships is complex and time-consuming
+                </p>
+                <ul class="benefit-list" style="text-align: left;">
+                    <li>Manual invoice generation leads to errors</li>
+                    <li>Inventory tracking across multiple systems</li>
+                    <li>GST compliance requires constant attention</li>
+                    <li>Customer and supplier data scattered everywhere</li>
+                    <li>No unified view of business operations</li>
+                    <li>Expensive enterprise solutions out of reach</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 3: The Solution -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Introducing Billinator</h2>
+                <p style="font-size: 1.4em; margin-bottom: 30px;">
+                    A comprehensive, all-in-one solution that simplifies your entire business operations
+                </p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="number">100%</div>
+                        <div class="label">GST Compliant</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">17+</div>
+                        <div class="label">Modules</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">24/7</div>
+                        <div class="label">Access</div>
+                    </div>
+                </div>
+                <p style="margin-top: 40px; font-size: 1.2em; color: #666;">
+                    Everything you need in one powerful platform
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Key Features -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Powerful Features</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>📄 GST Invoicing</h4>
+                        <p>B2B, B2C, Bill of Supply, Credit/Debit Notes - Fully GST compliant with automatic tax calculations</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📦 Inventory Management</h4>
+                        <p>Real-time stock tracking, low stock alerts, weighted average costing, and reorder management</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>👥 Customer & Supplier Management</h4>
+                        <p>Complete contact management with GST details, addresses, and transaction history</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🧾 Purchase & Sales</h4>
+                        <p>Complete invoice management for purchases and sales with automatic stock updates</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>💰 Outstanding Management</h4>
+                        <p>Track receivables and payables with aging reports and payment reminders</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📊 Comprehensive Reports</h4>
+                        <p>Sales, Purchase, GST, Stock, Customer, and P&L reports with export capabilities</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: CRM Features -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Built-in CRM System</h2>
+                <p style="font-size: 1.3em; margin-bottom: 30px;">
+                    Manage your sales pipeline and customer relationships effectively
+                </p>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🎯 Sales Pipeline</h4>
+                        <p>Track opportunities from lead to conversion with stage management</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📄 Quotes Management</h4>
+                        <p>Create, send, and track quotes with automatic conversion to invoices</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📅 Activities & Notes</h4>
+                        <p>Schedule calls, meetings, tasks, and maintain detailed customer notes</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>👤 Contact Management</h4>
+                        <p>Organize contacts with tags, notes, and interaction history</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Benefits -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Why Choose Billinator?</h2>
+                <ul class="benefit-list">
+                    <li><strong>Save Time:</strong> Automate invoicing, inventory updates, and reporting</li>
+                    <li><strong>Reduce Errors:</strong> Automated calculations and validations ensure accuracy</li>
+                    <li><strong>Stay Compliant:</strong> Built-in GST compliance with automatic tax calculations</li>
+                    <li><strong>Multi-Tenant:</strong> Complete data isolation for businesses with multiple entities</li>
+                    <li><strong>Real-Time Insights:</strong> Dashboard with key metrics and alerts</li>
+                    <li><strong>Role-Based Access:</strong> Control who sees what with Admin, Billing, and Inventory Manager roles</li>
+                    <li><strong>Scalable:</strong> Grows with your business from startup to enterprise</li>
+                    <li><strong>Secure:</strong> Enterprise-grade security with JWT authentication and encryption</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 7: Technology Stack -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Built with Modern Technology</h2>
+                <p style="font-size: 1.3em; margin-bottom: 40px;">
+                    Fast, reliable, and scalable architecture
+                </p>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>⚡ Next.js Frontend</h4>
+                        <p>Modern React framework for lightning-fast user experience</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🚀 FastAPI Backend</h4>
+                        <p>High-performance Python API with automatic documentation</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>💾 DuckDB Database</h4>
+                        <p>Lightning-fast analytical database for real-time insights</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔒 Enterprise Security</h4>
+                        <p>JWT authentication, rate limiting, and security headers</p>
+                    </div>
+                </div>
+                <p style="margin-top: 30px; font-size: 1.1em; color: #666;">
+                    Cloud-ready architecture that can be deployed anywhere
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Pricing -->
+        <div class="slide">
+            <div class="slide-content" style="text-align: center;">
+                <h2>Special Launch Offer</h2>
+                <div class="pricing-badge">
+                    🎉 FREE TO USE UNTIL 2027
+                </div>
+                <p style="font-size: 1.4em; margin: 40px 0;">
+                    <span class="highlight">Under Active Development</span>
+                </p>
+                <p style="font-size: 1.2em; color: #666; margin-bottom: 40px;">
+                    We're continuously improving Billinator based on user feedback.<br>
+                    Get started now and be part of our growth journey!
+                </p>
+                <div class="stats-grid" style="max-width: 800px; margin: 0 auto;">
+                    <div class="stat-card">
+                        <div class="number">$0</div>
+                        <div class="label">Current Cost</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">∞</div>
+                        <div class="label">Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">100%</div>
+                        <div class="label">Features</div>
+                    </div>
+                </div>
+                <p style="margin-top: 40px; font-size: 1.1em; color: #666;">
+                    No credit card required. Start using all features immediately.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 9: About Medhā Labs -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>Developed by Medhā Labs</h2>
+                <div class="company-info">
+                    <p style="font-size: 1.3em; margin-bottom: 20px;">
+                        <strong>Medhā Labs</strong> is a technology solutions company specializing in enterprise software development.
+                    </p>
+                    <p style="font-size: 1.1em; margin-bottom: 20px;">
+                        We build powerful, scalable solutions that help businesses streamline their operations and grow efficiently.
+                    </p>
+                    <p style="font-size: 1.1em;">
+                        Visit us at: <a href="https://medhalabs.in/" target="_blank">https://medhalabs.in/</a>
+                    </p>
+                </div>
+                <div style="margin-top: 40px; text-align: center;">
+                    <h3>Our Commitment</h3>
+                    <p style="font-size: 1.2em; color: #666;">
+                        Continuous improvement, responsive support, and cutting-edge technology
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Call to Action -->
+        <div class="slide">
+            <div class="slide-content" style="text-align: center;">
+                <div class="logo-container">
+                    <img src="frontend/public/logo.png" alt="Billinator Logo" onerror="this.style.display='none'" style="max-width: 150px;">
+                    <h1>Ready to Get Started?</h1>
+                </div>
+                <p style="font-size: 1.5em; margin: 40px 0; color: #666;">
+                    Join businesses already using Billinator to transform their operations
+                </p>
+                <div style="margin: 50px 0;">
+                    <a href="#" class="cta-button" onclick="alert('Visit our website to get started!'); return false;">
+                        Start Free Today
+                    </a>
+                </div>
+                <div class="company-info" style="margin-top: 50px;">
+                    <p style="font-size: 1.1em;">
+                        <strong>Billinator</strong> - Free to Use Until 2027
+                    </p>
+                    <p style="margin-top: 10px;">
+                        Developed by <a href="https://medhalabs.in/" target="_blank">Medhā Labs</a>
+                    </p>
+                    <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
+                        © 2024 Medhā Labs. All Rights Reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-button" id="prev-btn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-button" id="next-btn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            
+            // Update button states
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            showSlide(currentSlide + direction);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                changeSlide(-1);
+            } else if (e.key === 'ArrowRight') {
+                changeSlide(1);
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+
+        // Auto-advance (optional - uncomment to enable)
+        // setInterval(() => {
+        //     if (currentSlide < totalSlides - 1) {
+        //         changeSlide(1);
+        //     }
+        // }, 30000); // 30 seconds per slide
+    </script>
+</body>
+</html>
+
